@@ -5,13 +5,19 @@ var client_secret = "YOUR SECRET";
 var client = undefined;
 var access_token = undefined;
 
+var airvantageClientId = process.env.AIRVANTAGE_CLIENT_ID;
+var airvantageClientSecret = process.env.AIRVANTAGE_CLIENT_SECRET
+var airvantageRegion = process.env.AIRVANTAGE_REGION
+var airvantageApiUrl = 'https://' + (airvantageRegion || 'eu') + '.airvantage.net/api'
+
 var oauth2 = new OAuth2(
-	client_id,
-	client_secret, 
-	'https://na.airvantage.net/api/', 
-	'oauth/authorize',
-	'oauth2/token', 
-	null);
+		airvantageClientId,
+		airvantageClientSecret, 
+		airvantageApiUrl, 
+		'/oauth/authorize',
+		'/oauth/token', 
+		null
+);
 
 exports.list = function(req, res){
   res.send("Running...");
