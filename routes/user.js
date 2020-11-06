@@ -1,7 +1,6 @@
 
 var OAuth2 = require('OAuth').OAuth2;
-var client_id = "YOUR CLIENT ID";
-var client_secret = "YOUR SECRET";
+const axios = require('axios');
 var client = undefined;
 var access_token = undefined;
 
@@ -55,6 +54,49 @@ exports.applications = function(req, res) {
 	res.redirect(airvantageApiUrl + "/v1/applications");
 }
 
+exports.ips = function (req, res) {
+	axios.get(airvantageApiUrl + "/v1/systems?size=0",{
+		headers: {'Authorization': 'Bearer ' + access_token},
+	})
+  .catch(function (error) {
+		console.log(error);
+    res.render('sims', ERROR)		
+  })
+  .then(function (response) {
+		var totalCount = Math.ceil(response.data.count/100);
+		var subscriptions = []
+		for (var i = 0; i <= totalCount; i++) {
+			subscriptions.push(
+				axios.get(airvantageApiUrl + "/v1/systems?fields=name,subscription&offset="+ i * 100 + "&size=100",{
+					headers: {'Authorization': 'Bearer ' + access_token},
+				})
+			)
+		}
+		Promise.all(subscriptions).catch(function (error) {
+			console.log(error);
+			res.render('sims', "ERROR")		
+		})
+		.then(function (resps) {
+			var systems = [].concat.apply([], resps.map(systemRes => {
+				if (systemRes.data && systemRes.data.items) {
+					return systemRes.data.items
+				}
+				return null
+			}))
+			var ips = systems.map(system => {
+				console.log(system)
+				if (system.subscription && system.subscription.ipAddress) {
+					return {
+						"iccid": system.name.substring(4),
+						"ip_adress": system.subscription.ipAddress,
+					}
+				} else {
+					return null
+				}
+			}).filter(v => v != null)
+			res.render('sims', {sims:JSON.stringify(ips)})
+		})
+  });
 }
 
 exports.logout = function(req, res) {

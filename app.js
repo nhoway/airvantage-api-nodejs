@@ -40,6 +40,7 @@ app.get('/oauth2/callback', user.oauth2callback);
 app.get('/whoami', user.whoami);
 app.get('/systems', user.systems);
 app.get('/applications', user.applications);
+app.get('/ips', user.ips);
 
 app.get('/logout', user.logout);
 
