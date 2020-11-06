@@ -52,7 +52,9 @@ exports.systems = function(req, res) {
 }
 
 exports.applications = function(req, res) {
-	res.redirect("https://na.airvantage.net/api/v1/applications");
+	res.redirect(airvantageApiUrl + "/v1/applications");
+}
+
 }
 
 exports.logout = function(req, res) {
