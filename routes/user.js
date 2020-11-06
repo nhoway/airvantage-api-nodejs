@@ -44,11 +44,11 @@ exports.authorize = function(req, res) {
 }
 
 exports.whoami = function(req, res) {
-	res.redirect("https://na.airvantage.net/api/v1/users/current");
+	res.redirect(airvantageApiUrl + "/v1/users/current");
 }
 
 exports.systems = function(req, res) {
-	res.redirect("https://na.airvantage.net/api/v1/systems");
+	res.redirect(airvantageApiUrl + "/v1/systems");
 }
 
 exports.applications = function(req, res) {
