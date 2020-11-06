@@ -30,10 +30,9 @@ exports.authconnect = function(req, res) {
 
 exports.oauth2callback = function(req, res) {
 	oauth2.getOAuthAccessToken(
-       '',
-       {'grant_type':'client_credentials'},
+       req.query.code,
+       {'grant_type': 'authorization_code'},
        function (e, accessToken, refresh_token, results){
-       console.log('bearer: ',accessToken);
        access_token = accessToken;
        req.session.lastPage = '/authorize';
        res.redirect('/authorize');
