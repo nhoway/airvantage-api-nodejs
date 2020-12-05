@@ -84,7 +84,6 @@ exports.ips = function (req, res) {
 				return null
 			}))
 			var ips = systems.map(system => {
-				console.log(system)
 				if (system.subscription && system.subscription.ipAddress) {
 					return {
 						"iccid": system.name.substring(4),
